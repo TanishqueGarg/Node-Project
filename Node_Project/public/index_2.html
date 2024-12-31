@@ -42,31 +42,51 @@
           };
           $.ajax(obj)
             .done(function (resp) {
-              alert(resp);
-              $("#loginModal").modal("hide");
-            })
+              alert(resp.utype);
+            // console.log(resp);
+            localStorage.setItem("loggedmail",resp.email);
+            localStorage.setItem("loggedpwd",resp.pwd);
+            // console.log(localStorage);
+            $("#loginModal").modal("hide");
+            if(resp.utype == "brand"){
+              window.location.href='/client-dash.html'
+            }
+            else if(resp.utype=="influencer"){
+              window.location.href='/infl-dash.html'
+            }
+            else if(resp.utype=="admin"){
+              // window.location.href='/admin-users.html'
+              window.location.href='/admin-dash.html'
+            }
+          })
             .fail(function (err) {
               alert(err.statusText);
             });
         });
-        $("#btnforgotpwd").click(function () {
-          let obj = {
-            type: "get",
-            url: "forgot-pwd",
-            data: {
-              txtemail: $("#txtemail").val(),
-            },
-          };
-          $.ajax(obj)
-            .done(function (resp) {
-              alert("Success");
-            })
-            .fail(function (err) {
-              alert(err.statusText);
-            });
-        });
+        $("#btngetpwd").click(function () {
+        let obj = {
+          type: "get",
+          url: "forgot-pwd",
+          data: {
+            txtemail: $("#txtemail").val(),
+          },
+        };
+        $.ajax(obj)
+          .done(function (resp) {
+            alert("Success");
+            $("#settingsModal").modal("hide");
+          })
+          .fail(function (err) {
+            alert(err.statusText);
+          });
+      });
       });
     </script>
+    <style>
+      *{
+        font-family: 'Times New Roman', Times, serif;
+      }
+    </style>
     <!--Bootstrap Integration-->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -134,9 +154,9 @@
               <img src="pics/cimg3.jpg" class="d-block w-100" alt="Slide 3" style="height: 700px;" />
             </div>
           </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
+          <button style="color: black;" class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
+            <span style="color: black;" class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span style="color: black;" class="visually-hidden">Previous</span>
           </button>
           <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
@@ -302,41 +322,26 @@
     <!-- Forgot Password Modal -->
     <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <center>
-                      <h1 class="modal-title fs-5" id="exampleModalLabel">Settings</h1>
-                  </center>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                  <form>
-                      <div class="mb-3">
-                          <label for="txtsettingsemail" class="form-label">Email ID</label>
-                          <input type="email" class="form-control" name="txtsettingsemail" id="txtsettingsemail"
-                              aria-describedby="emailHelp">
-                      </div>
-                      <div class="mb-3">
-                          <label for="txtoldpwd" class="form-label">Old Password</label>
-                          <input type="password" class="form-control" name="txtoldpwd" id="txtoldpwd" width="20">
-                      </div>
-                      <div class="mb-3">
-                          <label for="txtnewpwd" class="form-label">New Password</label>
-                          <input type="password" class="form-control" name="txtnewpwd" id="txtnewpwd" width="20">
-                      </div>
-                      <div class="mb-3">
-                          <label for="txtconfirmpwd" class="form-label">Confirm Password</label>
-                          <input type="password" class="form-control" name="txtconfirmpwd" id="txtconfirmpwd"
-                              width="20">
-                      </div>
-                      <center><br>
-                          <button type="button" class="btn btn-primary" name="btnSettings"
-                              id="btnSettings">Update</button>
-                      </center>
-                  </form>
-              </div>
+        <div class="modal-content">
+          <div class="modal-header">
+            <center>
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Get Password</h1>
+            </center>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="txtemail" class="form-label">Email ID</label>
+                <input type="email" class="form-control" id="txtemail" required />
+              </div>
+              <center>
+                <button type="button" id="btngetpwd" class="btn btn-primary">Submit</button>
+              </center>
+            </form>
+          </div>
+        </div>
       </div>
-  </div>
+    </div>
 </body>
 </html>

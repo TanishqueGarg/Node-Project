@@ -22,19 +22,10 @@
         var controller = module.controller("MyEventsController", function ($scope, $http) {
             $scope.JsAry;
             $scope.fillAllevents = function () {
-                let url = "/fetch-all-events";
-                $http.get(url).then(Response, Error);
-                function Response(response) {
-                    $scope.JsAry = response.data;
-                }
-                function Error(err) {
-                    alert(err);
-                }
-            }
-
-            $scope.fillbyMail=function(req,resp)
-            {
-                let url="/fetchbyMailsID";
+                console.log(localStorage);
+                const loggedEmail = localStorage.getItem("loggedmail");
+                console.log(loggedEmail);
+                let url = "/fetch-all-events?email="+loggedEmail;
                 $http.get(url).then(Response, Error);
                 function Response(response) {
                     $scope.JsAry = response.data;
@@ -54,16 +45,36 @@
                     alert(err);
                 }
             }
+            // $scope.fillbyMail=function(req,resp)
+            // {
+            //     let url="/fetchbyMailsID";
+            //     $http.get(url).then(Response, Error);
+            //     function Response(response) {
+            //         $scope.JsAry = response.data;
+            //     }
+            //     function Error(err) {
+            //         alert(err);
+            //     }
+            // }
         })
     </script>
+    <style>
+        *{
+            font-family: 'Times New Roman', Times, serif;
+        }
+    </style>
 </head>
 
-<body ng-app="MyEventsModule" ng-controller="MyEventsController" ng-init="fillAllevents();getAll();">
+<body ng-app="MyEventsModule" ng-controller="MyEventsController" ng-init="fillAllevents();getAll();" style="background-color: #e3856b;">
     <center>
-        <h3>All Events</h3>
+        <!-- <h3>All Events</h3> -->
+        <div style="font-size: 30px; text-align: center;border-top: 2px black solid;border-bottom: 2px black solid;background-color: white;padding-bottom: 5px; font-family: 'Times New Roman', Times, serif; margin-top: 10px;">
+            All Events
+        </div>
+        <br>
     </center>
     <div style="margin-left: 470px;">
-        <div style="float: left;">
+        <!-- <div style="float: left;">
             <label for="Eventstxtemail" class="form-label" style="margin-right: 15px;">Email ID</label><br>
         </div>
         <div class="col-md-3" style="float: left;">
@@ -73,34 +84,37 @@
             <input type="button" value="Search" name="BtnSearchEvents" id="BtnSearchEvents"
                 ng-click="fillAllEvents1(Eventstxtemail);getAll(); " class="btn btn-outline-success"
                 style="height: 35px; margin-left: 15px;">
-        </div>
+        </div> -->
     </div>
 
     <div>
-        <table border="1" class="table">
+        <table border="2" class="table">
             <tr>
-                <th>R. ID</th>
-                <th>Events</th>
-                <th>Date of Event</th>
-                <th>Time of Event</th>
-                <th>City</th>
+                <th>S. No.</th>
+                <th>Event ID</th>
+                <th>Event Name</th>
+                <th>Date of the Event</th>
+                <th>Time of the Event</th>
                 <th>Venue</th>
+                <th>City</th>
+                <th></th>
             </tr>
-            <tr ng-repeat="obj in JsAry">
-                <td>{{obj.rid}}</td>
-                <td>{{obj.emailid}}</td>
+            <tr ng-repeat="obj in JsAry track by obj.rid">
+                <td>{{$index + 1}}</td> <!-- Serial Number Column -->
+                <td >{{obj.rid}}</td>
+                <!-- <td>{{obj.emailid}}</td> -->
                 <td>{{obj.events}}</td>
                 <td>{{obj.doe}}</td>
                 <td>{{obj.tos}}</td>
-                <td>{{obj.city}}</td>
                 <td>{{obj.venue}}</td>
+                <td>{{obj.city}}</td>
                 <td>
                     <center>
-                        <input type="button" value="Complete" ng-click="doDelete(obj.rid);">
+                        <input type="button" value="Complete" ng-click="doDelete(obj.rid);" class="btn btn-danger btn-sm">
                     </center>
                 </td>
             </tr>
-        </table>
+        </table>        
     </div>
 </body>
 
